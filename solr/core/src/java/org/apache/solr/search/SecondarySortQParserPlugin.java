@@ -2,7 +2,6 @@ package org.apache.solr.search;
 
 import org.apache.lucene.search.*;
 import org.apache.solr.common.params.SolrParams;
-import org.apache.solr.common.util.NamedList;
 import org.apache.solr.core.SolrCore;
 import org.apache.solr.handler.component.MergeStrategy;
 import org.apache.solr.request.SolrQueryRequest;
@@ -37,16 +36,16 @@ public class SecondarySortQParserPlugin extends QParserPlugin {
         public Query parse() {
 
             SolrCore core = req.getCore();
-            Map<String, Collector> secondaySortCollectorMap = core.getLatestSchema().getSecondarySortCollectorMap();
+            ExternalDataSource dataSource = core.getLatestSchema().getExternalDataSource();
 
-            SecondarySortingCollector secondarySortingCollector = SecondarySortingCollector.create(secondaySortCollectorMap, ...);
+            SecondarySortCollector secondarySortCollector = SecondarySortCollector.create(secondaySortCollectorMap, ...);
 
             return new RankQuery() {
                 Query mainQuery;
 
                 @Override
                 public TopDocsCollector getTopDocsCollector(int len, QueryCommand cmd, IndexSearcher searcher) throws IOException {
-                    return secondarySortingCollector;
+                    return secondarySortCollector;
                 }
 
                 @Override
