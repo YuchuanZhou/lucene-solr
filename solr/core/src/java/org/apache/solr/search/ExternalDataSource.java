@@ -1,6 +1,10 @@
 package org.apache.solr.search;
 
-public interface ExternalDataSource<Number, V> {
+import org.apache.lucene.search.SortField;
 
-    public V getValue(Number key);
+public interface ExternalDataSource<K, V> {
+
+  public K getKeyType();
+
+  public V getValue(K key);
 }

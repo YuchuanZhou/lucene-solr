@@ -36,9 +36,9 @@ public class SecondarySortQParserPlugin extends QParserPlugin {
         public Query parse() {
 
             SolrCore core = req.getCore();
-            ExternalDataSource dataSource = core.getLatestSchema().getExternalDataSource();
+            Map<String, ExternalDataSource> dataSourceMap = core.getLatestSchema().getExternalDataSourceMap();
 
-            SecondarySortCollector secondarySortCollector = SecondarySortCollector.create(secondaySortCollectorMap, ...);
+            SecondarySortCollector secondarySortCollector = SecondarySortCollector.create(dataSourceMap, sort);
 
             return new RankQuery() {
                 Query mainQuery;
